@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+:root {
+  --background: #06080c;
+  --foreground: #f0f4f8;
+  --accent: #00d4ff;
+  --accent-secondary: #0099cc;
+  --surface: #0d1117;
+  --surface-elevated: #161b22;
+  --border: #21262d;
+  --muted: #7d8590;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(0, 212, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Atmospheric glow effects */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15),
+              0 0 40px rgba(0, 212, 255, 0.1),
+              0 0 60px rgba(0, 212, 255, 0.05);
+}
+
+.glow-accent-soft {
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.08),
+              0 0 60px rgba(0, 212, 255, 0.04);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5),
+               0 0 40px rgba(0, 212, 255, 0.3);
+}
+
+/* Gradient border utility */
+.gradient-border {
+  position: relative;
+  background: var(--surface);
+  border-radius: 12px;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), rgba(0, 212, 255, 0.1), rgba(0, 153, 204, 0.2));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Glow divider */
+.glow-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 212, 255, 0.3) 20%,
+    rgba(0, 212, 255, 0.5) 50%,
+    rgba(0, 212, 255, 0.3) 80%,
+    transparent
+  );
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.3),
+              0 0 16px rgba(0, 212, 255, 0.2);
+}
+
+/* Task item animations */
+.task-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-item:hover {
+  background: rgba(0, 212, 255, 0.05);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.task-item.completed {
+  opacity: 0.5;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+/* Tab animations */
+.tab-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Checkbox animation */
+.checkbox-custom {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkbox-custom.checked {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+/* Logo X connector */
+.logo-x {
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: var(--foreground);
+}
