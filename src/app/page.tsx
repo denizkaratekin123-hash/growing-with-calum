@@ -1,7 +1,86 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+
+// Preloader quote - natural, conversational
+const PRELOADER_QUOTE = "Hey! Just getting everything ready for you. This is your personal command center where you can track exactly what we're building together...";
+
+// Preloader Component
+function Preloader({ onComplete }: { onComplete: () => void }) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTypingDone, setIsTypingDone] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  // Typing effect
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < PRELOADER_QUOTE.length) {
+        setDisplayedText(PRELOADER_QUOTE.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsTypingDone(true);
+      }
+    }, 35); // Speed of typing
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-dismiss after typing is done + delay
+  useEffect(() => {
+    if (isTypingDone) {
+      const timeout = setTimeout(() => {
+        setFadeOut(true);
+        setTimeout(onComplete, 800); // Wait for fade animation
+      }, 1500); // Pause after typing before fade
+      return () => clearTimeout(timeout);
+    }
+  }, [isTypingDone, onComplete]);
+
+  return (
+    <div className={`preloader ${fadeOut ? 'fade-out' : ''}`}>
+      {/* Floating particles */}
+      <div className="preloader-particles">
+        <div className="particle" />
+        <div className="particle" />
+        <div className="particle" />
+        <div className="particle" />
+        <div className="particle" />
+        <div className="particle" />
+      </div>
+
+      {/* Pulsing glow */}
+      <div className="preloader-glow" />
+
+      {/* Avatar with rotating glow ring */}
+      <div className="preloader-avatar">
+        <Image
+          src="/headshot.png"
+          alt="Deniz"
+          width={120}
+          height={120}
+          priority
+        />
+      </div>
+
+      {/* Quote with typing effect */}
+      <div className="preloader-quote">
+        <p className="text-foreground/90 text-base sm:text-lg leading-relaxed">
+          &ldquo;{displayedText}
+          {!isTypingDone && <span className="typing-cursor" />}
+          {isTypingDone && <>&rdquo;</>}
+        </p>
+      </div>
+
+      {/* Progress bar */}
+      <div className="preloader-progress">
+        <div className="preloader-progress-bar" />
+      </div>
+    </div>
+  );
+}
 
 // Task data grouped by phase
 const taskGroups = [
@@ -154,11 +233,16 @@ function CampaignRow({ campaign }: { campaign: Campaign }) {
 }
 
 export default function Dashboard() {
+  const [showPreloader, setShowPreloader] = useState(true);
   const [activeTab, setActiveTab] = useState("roadmap");
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
   const [metaData, setMetaData] = useState<MetaData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handlePreloaderComplete = useCallback(() => {
+    setShowPreloader(false);
+  }, []);
 
   // Load completed tasks from localStorage on mount
   useEffect(() => {
@@ -216,6 +300,9 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen dot-grid">
+      {/* Cinematic Preloader */}
+      {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
+
       {/* Ambient glow effect at top */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
 

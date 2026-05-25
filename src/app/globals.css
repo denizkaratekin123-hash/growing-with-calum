@@ -158,3 +158,198 @@ body {
   background: rgba(0, 212, 255, 0.3);
   color: var(--foreground);
 }
+
+/* ========== PRELOADER ANIMATIONS ========== */
+
+/* Preloader container - anchored to top, not centered */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 25vh;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Profile image with animated glow ring */
+.preloader-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+}
+
+.preloader-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated glow ring */
+.preloader-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    var(--accent),
+    var(--accent-secondary),
+    transparent
+  );
+  animation: rotate-glow 3s linear infinite;
+  z-index: 1;
+}
+
+.preloader-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: var(--background);
+  z-index: 1;
+}
+
+@keyframes rotate-glow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Pulsing glow behind avatar */
+.preloader-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse-glow 2s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* Quote text with fade-in */
+.preloader-quote {
+  max-width: 400px;
+  text-align: center;
+  padding: 0 1.5rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fade-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+}
+
+.preloader-quote p {
+  transition: all 0.15s ease-out;
+}
+
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typing cursor effect */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Progress bar at bottom */
+.preloader-progress {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: var(--surface-elevated);
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fade-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) 1s forwards;
+}
+
+.preloader-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+  border-radius: 2px;
+  animation: progress-fill 2.5s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
+  width: 0%;
+}
+
+@keyframes progress-fill {
+  to { width: 100%; }
+}
+
+/* Floating particles */
+.preloader-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float-up 3s ease-out infinite;
+}
+
+.particle:nth-child(1) { left: 20%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+.particle:nth-child(3) { left: 60%; animation-delay: 1s; }
+.particle:nth-child(4) { left: 80%; animation-delay: 1.5s; }
+.particle:nth-child(5) { left: 30%; animation-delay: 0.3s; }
+.particle:nth-child(6) { left: 70%; animation-delay: 0.8s; }
+
+@keyframes float-up {
+  0% {
+    bottom: -10px;
+    opacity: 0;
+    transform: scale(0);
+  }
+  10% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
